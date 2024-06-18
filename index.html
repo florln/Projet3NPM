@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle Simulator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h1>Vehicle Simulator by Florian</h1>
+<div id="alerts"></div>
+<div id="positions"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    const socket = io();
+
+    socket.on('position', (data) => {
+        const { vehicleId, position, timestamp } = data;
+        const positionsDiv = document.getElementById('positions');
+        const positionElement = document.createElement('p');
+        positionElement.textContent = `Vehicle ${vehicleId}: ${JSON.stringify(position)} at ${new Date(timestamp).toLocaleTimeString()}`;
+        positionsDiv.appendChild(positionElement);
+    });
+
+    socket.on('alert', (data) => {
+        const { vehicleId, message } = data;
+        const alertsDiv = document.getElementById('alerts');
+        const alertElement = document.createElement('p');
+        alertElement.textContent = `ALERT: ${message}`;
+        alertsDiv.appendChild(alertElement);
+    });
+</script>
+</body>
+</html>
